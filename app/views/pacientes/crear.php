@@ -2,43 +2,109 @@
 <html>
 <head>
 
-<title>Nuevo Paciente</title>
+<title>Registrar Paciente</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+.card{
+border:none;
+border-radius:10px;
+}
+
+</style>
+
 </head>
 
-<body class="container mt-4">
+<body class="container-fluid mt-4">
 
-<h2>Registrar Paciente</h2>
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3 class="mb-4">➕ Registrar Paciente</h3>
 
 <form action="../../controllers/PacienteController.php?accion=guardar" method="POST">
 
-<input name="nombre" class="form-control mb-2" placeholder="Nombre completo">
+<div class="row">
 
-<input name="tipo_documento" class="form-control mb-2" placeholder="Tipo documento">
+<div class="col-md-6 mb-3">
+<label class="form-label">Nombre completo</label>
+<input name="nombre" class="form-control" placeholder="Nombre completo">
+</div>
 
-<input name="documento" class="form-control mb-2" placeholder="Numero documento">
+<div class="col-md-6 mb-3">
+<label class="form-label">Tipo de documento</label>
+<input name="tipo_documento" class="form-control" placeholder="CC / TI / CE">
+</div>
 
-<input name="direccion" class="form-control mb-2" placeholder="Direccion">
+<div class="col-md-6 mb-3">
+<label class="form-label">Número de documento</label>
+<input name="documento" class="form-control" placeholder="Número documento">
+</div>
 
-<input name="telefono" class="form-control mb-2" placeholder="Telefono">
+<div class="col-md-6 mb-3">
+<label class="form-label">Dirección</label>
+<input name="direccion" class="form-control" placeholder="Dirección">
+</div>
 
-<input name="celular" class="form-control mb-2" placeholder="Celular">
+<div class="col-md-6 mb-3">
+<label class="form-label">Teléfono</label>
+<input name="telefono" class="form-control" placeholder="Teléfono">
+</div>
 
-<input type="date" name="fecha" class="form-control mb-2">
+<div class="col-md-6 mb-3">
+<label class="form-label">Celular</label>
+<input name="celular" class="form-control" placeholder="Celular">
+</div>
 
-<input name="edad" class="form-control mb-2" placeholder="Edad">
+<div class="col-md-6 mb-3">
+<label class="form-label">Fecha de nacimiento</label>
+<input type="date" name="fecha" class="form-control">
+</div>
 
-<input name="eps" class="form-control mb-2" placeholder="EPS">
+<div class="col-md-6 mb-3">
+<label class="form-label">Edad</label>
+<input name="edad" class="form-control" placeholder="Edad">
+</div>
 
-<input name="contacto" class="form-control mb-2" placeholder="Contacto emergencia">
+<div class="col-md-6 mb-3">
+<label class="form-label">EPS</label>
+<input name="eps" class="form-control" placeholder="EPS">
+</div>
 
-<input name="parentesco" class="form-control mb-2" placeholder="Parentesco">
+<div class="col-md-6 mb-3">
+<label class="form-label">Contacto de emergencia</label>
+<input name="contacto" class="form-control" placeholder="Contacto emergencia">
+</div>
 
-<button class="btn btn-success">Guardar</button>
+<div class="col-md-6 mb-3">
+<label class="form-label">Parentesco</label>
+<input name="parentesco" class="form-control" placeholder="Parentesco">
+</div>
+
+</div>
+
+<button class="btn btn-success">
+💾 Guardar Paciente
+</button>
+
+<a href="listar.php" class="btn btn-secondary">
+⬅ Volver
+</a>
 
 </form>
+
+</div>
+
+</div>
 
 </body>
 </html>

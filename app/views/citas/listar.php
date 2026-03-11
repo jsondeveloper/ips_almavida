@@ -2,9 +2,9 @@
 
 require_once "../../models/Cita.php";
 
-$c=new Cita();
+$c = new Cita();
 
-$citas=$c->listar();
+$citas = $c->listar();
 
 ?>
 
@@ -14,17 +14,46 @@ $citas=$c->listar();
 
 <title>Citas</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+.card{
+border:none;
+border-radius:10px;
+}
+
+</style>
 
 </head>
 
-<body class="container mt-4">
+<body class="container-fluid mt-4">
 
-<h2>Citas</h2>
+<div class="card shadow">
 
-<a href="crear.php" class="btn btn-primary mb-3">Nueva Cita</a>
+<div class="card-body">
 
-<table class="table table-bordered">
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+
+<h3>📅 Citas</h3>
+
+<a href="crear.php" class="btn btn-primary">
+➕ Nueva Cita
+</a>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-striped table-hover align-middle">
+
+<thead class="table-dark">
 
 <tr>
 <th>ID</th>
@@ -32,24 +61,38 @@ $citas=$c->listar();
 <th>Examen</th>
 <th>Empresa</th>
 <th>Fecha</th>
-<th>Acciones</th>
+<th class="text-center">Acciones</th>
 </tr>
 
-<?php foreach($citas as $c){ ?>
+</thead>
+
+<tbody>
+
+<?php foreach($citas as $cita){ ?>
 
 <tr>
 
-<td><?= $c['id'] ?></td>
-<td><?= $c['nombre_completo'] ?></td>
-<td><?= $c['tipo_examen'] ?></td>
-<td><?= $c['empresa'] ?></td>
-<td><?= $c['fecha_cita'] ?></td>
+<td><?= $cita['id'] ?></td>
+<td><?= $cita['nombre_completo'] ?></td>
+<td><?= $cita['tipo_examen'] ?></td>
+<td><?= $cita['empresa'] ?></td>
+<td><?= $cita['fecha_cita'] ?></td>
 
-<td>
+<td class="text-center">
 
-<a href="editar.php?id=<?= $c['id'] ?>" class="btn btn-warning">Editar</a>
+<div class="d-flex justify-content-center flex-wrap gap-1">
 
-<a href="../../controllers/CitaController.php?accion=eliminar&id=<?= $c['id'] ?>" class="btn btn-danger">Eliminar</a>
+<a href="editar.php?id=<?= $cita['id'] ?>" class="btn btn-warning btn-sm">
+✏ Editar
+</a>
+
+<a href="../../controllers/CitaController.php?accion=eliminar&id=<?= $cita['id'] ?>" 
+class="btn btn-danger btn-sm"
+onclick="return confirm('¿Eliminar cita?')">
+🗑 Eliminar
+</a>
+
+</div>
 
 </td>
 
@@ -57,7 +100,15 @@ $citas=$c->listar();
 
 <?php } ?>
 
+</tbody>
+
 </table>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>

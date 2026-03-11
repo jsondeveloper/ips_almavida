@@ -1,7 +1,7 @@
 <?php
 require_once "../../models/Paciente.php";
-$p=new Paciente();
-$pacientes=$p->listar();
+$p = new Paciente();
+$pacientes = $p->listar();
 ?>
 
 <!DOCTYPE html>
@@ -10,17 +10,50 @@ $pacientes=$p->listar();
 
 <title>Pacientes</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+.card{
+border:none;
+border-radius:10px;
+}
+
+.table th{
+white-space:nowrap;
+}
+
+</style>
 
 </head>
 
-<body class="container mt-4">
+<body class="container-fluid mt-4">
 
-<h2>Pacientes</h2>
+<div class="card shadow">
 
-<a href="crear.php" class="btn btn-primary mb-3">Nuevo Paciente</a>
+<div class="card-body">
 
-<table class="table table-bordered">
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+
+<h3 class="mb-2">👤 Pacientes</h3>
+
+<a href="crear.php" class="btn btn-primary">
+➕ Nuevo Paciente
+</a>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-striped table-hover align-middle">
+
+<thead class="table-dark">
 
 <tr>
 <th>ID</th>
@@ -28,24 +61,38 @@ $pacientes=$p->listar();
 <th>Documento</th>
 <th>Celular</th>
 <th>EPS</th>
-<th>Acciones</th>
+<th class="text-center">Acciones</th>
 </tr>
 
-<?php foreach($pacientes as $p){ ?>
+</thead>
+
+<tbody>
+
+<?php foreach($pacientes as $pac){ ?>
 
 <tr>
 
-<td><?= $p['id'] ?></td>
-<td><?= $p['nombre_completo'] ?></td>
-<td><?= $p['numero_documento'] ?></td>
-<td><?= $p['celular'] ?></td>
-<td><?= $p['eps'] ?></td>
+<td><?= $pac['id'] ?></td>
+<td><?= $pac['nombre_completo'] ?></td>
+<td><?= $pac['numero_documento'] ?></td>
+<td><?= $pac['celular'] ?></td>
+<td><?= $pac['eps'] ?></td>
 
-<td>
+<td class="text-center">
 
-<a href="editar.php?id=<?= $p['id'] ?>" class="btn btn-warning">Editar</a>
+<div class="d-flex justify-content-center flex-wrap gap-1">
 
-<a href="../../controllers/PacienteController.php?accion=eliminar&id=<?= $p['id'] ?>" class="btn btn-danger">Eliminar</a>
+<a href="editar.php?id=<?= $pac['id'] ?>" class="btn btn-warning btn-sm">
+✏ Editar
+</a>
+
+<a href="../../controllers/PacienteController.php?accion=eliminar&id=<?= $pac['id'] ?>" 
+class="btn btn-danger btn-sm"
+onclick="return confirm('¿Eliminar paciente?')">
+🗑 Eliminar
+</a>
+
+</div>
 
 </td>
 
@@ -53,7 +100,15 @@ $pacientes=$p->listar();
 
 <?php } ?>
 
+</tbody>
+
 </table>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>

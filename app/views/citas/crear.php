@@ -2,9 +2,9 @@
 
 require_once "../../models/Paciente.php";
 
-$p=new Paciente();
+$p = new Paciente();
 
-$pacientes=$p->listar();
+$pacientes = $p->listar();
 
 ?>
 
@@ -14,23 +14,48 @@ $pacientes=$p->listar();
 
 <title>Nueva Cita</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+.card{
+border:none;
+border-radius:10px;
+}
+
+</style>
 
 </head>
 
-<body class="container mt-4">
+<body class="container-fluid mt-4">
 
-<h2>Registrar Cita</h2>
+<div class="card shadow">
+
+<div class="card-body">
+
+<h3 class="mb-4">📅 Registrar Cita</h3>
 
 <form action="../../controllers/CitaController.php?accion=guardar" method="POST">
 
-<select name="paciente" class="form-control mb-2">
+<div class="row">
 
-<?php foreach($pacientes as $p){ ?>
+<div class="col-md-6 mb-3">
 
-<option value="<?= $p['id'] ?>">
+<label class="form-label">Paciente</label>
 
-<?= $p['nombre_completo'] ?>
+<select name="paciente" class="form-control">
+
+<?php foreach($pacientes as $pac){ ?>
+
+<option value="<?= $pac['id'] ?>">
+
+<?= $pac['nombre_completo'] ?>
 
 </option>
 
@@ -38,15 +63,47 @@ $pacientes=$p->listar();
 
 </select>
 
-<input name="examen" class="form-control mb-2" placeholder="Tipo examen">
+</div>
 
-<input name="empresa" class="form-control mb-2" placeholder="Empresa">
+<div class="col-md-6 mb-3">
 
-<input type="datetime-local" name="fecha" class="form-control mb-2">
+<label class="form-label">Tipo de examen</label>
 
-<button class="btn btn-success">Guardar</button>
+<input name="examen" class="form-control" placeholder="Tipo examen">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">Empresa</label>
+
+<input name="empresa" class="form-control" placeholder="Empresa">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">Fecha y hora</label>
+
+<input type="datetime-local" name="fecha" class="form-control">
+
+</div>
+
+</div>
+
+<button class="btn btn-success">
+💾 Guardar Cita
+</button>
+
+<a href="listar.php" class="btn btn-secondary">
+⬅ Volver
+</a>
 
 </form>
+
+</div>
+
+</div>
 
 </body>
 </html>
