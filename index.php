@@ -3,73 +3,145 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Sistema IPS Alma Vida</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+overflow:hidden;
+}
+
+.sidebar{
+height:100vh;
+background:#0d6efd;
+color:white;
+}
+
+.sidebar a{
+color:white;
+text-decoration:none;
+display:block;
+padding:15px;
+font-size:18px;
+}
+
+.sidebar a:hover{
+background:#084298;
+}
+
+iframe{
+width:100%;
+height:100vh;
+border:none;
+}
+
+</style>
 
 </head>
 
 <body>
 
+<!-- NAVBAR -->
+
 <nav class="navbar navbar-dark bg-primary">
-<div class="container">
-<span class="navbar-brand mb-0 h1">IPS ALMA VIDA</span>
+
+<div class="container-fluid">
+
+<button class="btn btn-light d-md-none" data-bs-toggle="offcanvas" data-bs-target="#menu">
+☰
+</button>
+
+<span class="navbar-brand">IPS Alma Vida</span>
+
 </div>
+
 </nav>
 
-<div class="container mt-5">
-
-<h2 class="mb-4">Dashboard</h2>
+<div class="container-fluid">
 
 <div class="row">
 
-<!-- MODULO PACIENTES -->
+<!-- SIDEBAR PC -->
 
-<div class="col-md-4">
+<div class="col-md-2 sidebar d-none d-md-block">
 
-<div class="card shadow">
+<h4 class="text-center mt-3">Menú</h4>
 
-<div class="card-body text-center">
+<a href="app/views/pacientes/listar.php" target="contenido">
+👤 Pacientes
+</a>
 
-<h4>Pacientes</h4>
+<a href="app/views/citas/listar.php" target="contenido">
+📅 Citas
+</a>
 
-<p>Gestión de pacientes registrados</p>
+</div>
 
-<a href="app/views/pacientes/listar.php" class="btn btn-primary">
-Gestionar Pacientes
+<!-- CONTENIDO -->
+
+<div class="col-md-10 p-0">
+
+<iframe name="contenido"></iframe>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- MENU MOVIL -->
+
+<div class="offcanvas offcanvas-start sidebar" tabindex="-1" id="menu">
+
+<div class="offcanvas-header">
+
+<h5>Menú</h5>
+
+<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+
+</div>
+
+<div class="offcanvas-body">
+
+<a class="d-block p-3 text-white"
+href="app/views/pacientes/listar.php"
+target="contenido"
+onclick="cerrarMenu()">
+👤 Pacientes
+</a>
+
+<a class="d-block p-3 text-white"
+href="app/views/citas/listar.php"
+target="contenido"
+onclick="cerrarMenu()">
+📅 Citas
 </a>
 
 </div>
 
 </div>
 
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- MODULO CITAS -->
+<script>
 
-<div class="col-md-4">
+function cerrarMenu(){
 
-<div class="card shadow">
+var menu = document.getElementById('menu');
 
-<div class="card-body text-center">
+var offcanvas = bootstrap.Offcanvas.getInstance(menu);
 
-<h4>Citas</h4>
+if(offcanvas){
+offcanvas.hide();
+}
 
-<p>Gestión de citas médicas</p>
+}
 
-<a href="app/views/citas/listar.php" class="btn btn-success">
-Gestionar Citas
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+</script>
 
 </body>
 </html>
