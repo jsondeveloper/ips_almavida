@@ -18,7 +18,11 @@
 <div class="card shadow">
 <div class="card-body">
 <h4 class="text-center mb-3">IPS Alma Vida</h4>
-
+<?php if(isset($_GET['error'])): ?>
+<div class="alert alert-danger">
+    Credenciales incorrectas para el correo <b><?= htmlspecialchars($_GET['email'] ?? '') ?></b>.
+</div>
+<?php endif; ?>
 <form id="formLogin" action="../controllers/AuthController.php?accion=login" method="POST" novalidate>
 
 <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>

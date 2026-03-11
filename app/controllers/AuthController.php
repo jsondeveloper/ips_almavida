@@ -10,22 +10,20 @@ $usuario=new Usuario();
 
 if($accion=="login"){
 
-$email=$_POST['email'];
-$password=$_POST['password'];
+    $email=$_POST['email'];
+    $password=$_POST['password'];
 
-$user=$usuario->buscarPorEmail($email);
+    $user=$usuario->buscarPorEmail($email);
 
-if($user && password_verify($password,$user['password'])){
-
-$_SESSION['usuario']=$user['nombre'];
-
-header("Location: ../../index.php");
-
-}else{
-
-echo "Credenciales incorrectas";
-
-}
+    if($user && password_verify($password,$user['password'])){
+        $_SESSION['usuario']=$user['nombre'];
+        header("Location: ../../index.php");
+        exit;
+    } else {
+        // Redirigir al login con error
+        header("Location: ../auth/login.php?error=1&email=".urlencode($email));
+        exit;
+    }
 
 }
 
