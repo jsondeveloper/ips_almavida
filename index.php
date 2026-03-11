@@ -20,7 +20,7 @@ margin:0;
 }
 
 .sidebar{
-height:calc(100vh - 56px);
+height:calc(100vh - 50px);
 background:#0d6efd;
 color:white;
 display:flex;
@@ -63,7 +63,7 @@ font-size:15px;
 
 iframe{
 width:100%;
-height:calc(100vh - 56px);
+height:calc(100vh - 50px);
 border:none;
 }
 
