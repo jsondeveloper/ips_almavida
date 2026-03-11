@@ -81,12 +81,61 @@ background:#084298;
 color:white;
 }
 
+#fecha{
+font-size:14px;
+opacity:0.9;
+}
 
+#hora{
+font-size:16px;
+letter-spacing:1px;
+}
+
+.reloj-icono{
+display:inline-block;
+animation:rotarReloj 2s linear infinite;
+}
+
+@keyframes rotarReloj{
+0%{ transform:rotate(0deg); }
+100%{ transform:rotate(360deg); }
+}
 
 </style>
 
 </head>
+<script>
 
+function actualizarReloj(){
+
+const ahora = new Date();
+
+const opcionesFecha = {
+weekday:'short',
+year:'numeric',
+month:'short',
+day:'numeric'
+};
+
+let fecha = ahora.toLocaleDateString('es-ES',opcionesFecha);
+
+let hora = ahora.toLocaleTimeString('es-ES',{
+hour:'2-digit',
+minute:'2-digit',
+second:'2-digit'
+});
+
+document.getElementById("fecha").innerHTML = "📅 " + fecha;
+
+document.getElementById("hora").innerHTML = hora;
+
+}
+
+setInterval(actualizarReloj,1000);
+
+actualizarReloj();
+
+</script>
 <body>
 
 <!-- NAVBAR -->
@@ -95,18 +144,37 @@ color:white;
 
 <div class="container-fluid">
 
-<button class="btn btn-light d-md-none" data-bs-toggle="offcanvas" data-bs-target="#menu">
+<div class="d-flex align-items-center">
+
+<button class="btn btn-light d-md-none me-3" data-bs-toggle="offcanvas" data-bs-target="#menu">
 ☰
 </button>
 
-<span class="navbar-brand">IPS Alma Vida</span>
+<span class="navbar-brand mb-0 h1">IPS Alma Vida</span>
+
+</div>
+
+<div class="d-flex align-items-center text-white gap-3">
+
+<div id="fecha" class="fw-semibold"></div>
+
+<div class="d-flex align-items-center gap-2">
+
+<span class="reloj-icono">🕒</span>
+
+<div id="hora" class="fw-bold"></div>
+
+</div>
+
+</div>
 
 </div>
 
 </nav>
 
-<div class="container-fluid">
+<!-- LAYOUT PRINCIPAL -->
 
+<div class="container-fluid">
 <div class="row">
 
 <!-- SIDEBAR PC -->
@@ -114,8 +182,6 @@ color:white;
 <div class="col-md-2 sidebar d-none d-md-flex">
 
 <div class="menu-links">
-
-
 
 <a href="app/views/dashboard/index.php" target="contenido">
 📊 Dashboard
@@ -154,7 +220,6 @@ color:white;
 </div>
 
 </div>
-
 </div>
 
 <!-- MENU MOVIL -->
@@ -229,6 +294,8 @@ offcanvas.hide();
 }
 
 </script>
+
+
 
 </body>
 </html>
