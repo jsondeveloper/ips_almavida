@@ -71,6 +71,10 @@ border:none;
 
 <h4 class="text-center mt-3">Menú</h4>
 
+<a href="app/views/dashboard/index.php" target="contenido">
+📊 Dashboard
+</a>
+
 <a href="app/views/pacientes/listar.php" target="contenido">
 👤 Pacientes
 </a>
@@ -85,7 +89,7 @@ border:none;
 
 <div class="col-md-10 p-0">
 
-<iframe name="contenido"></iframe>
+<iframe name="contenido" src="app/views/dashboard/index.php"></iframe>
 
 </div>
 
@@ -106,6 +110,13 @@ border:none;
 </div>
 
 <div class="offcanvas-body">
+
+<a class="d-block p-3 text-white"
+href="app/views/dashboard/index.php"
+target="contenido"
+onclick="cerrarMenu()">
+📊 Dashboard
+</a>
 
 <a class="d-block p-3 text-white"
 href="app/views/pacientes/listar.php"
