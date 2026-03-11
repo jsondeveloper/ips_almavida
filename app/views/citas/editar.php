@@ -1,5 +1,5 @@
 <?php
-
+require_once "../../middleware/auth.php";
 require_once __DIR__ . "/../../models/Cita.php";
 require_once __DIR__ . "/../../models/Paciente.php";
 

@@ -1,3 +1,6 @@
+<?php
+require_once "app/middleware/auth.php";
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,33 +14,74 @@
 
 <style>
 
-body{
-overflow:hidden;
+html,body{
+height:100%;
+margin:0;
 }
 
 .sidebar{
-height:100vh;
+height:calc(100vh - 56px);
 background:#0d6efd;
 color:white;
+display:flex;
+flex-direction:column;
 }
 
 .sidebar a{
 color:white;
 text-decoration:none;
 display:block;
-padding:15px;
-font-size:18px;
+padding:14px 18px;
+font-size:17px;
+transition:0.2s;
 }
 
 .sidebar a:hover{
 background:#084298;
 }
 
+.menu-links{
+flex:1;
+}
+
+.usuario-box{
+border-top:2px solid rgba(255,255,255,0.25);
+padding:15px 0 15px 0;
+}
+.usuario-box .mb-2{
+color:white;
+text-decoration:none;
+display:block;
+padding:0 18px;
+font-size:17px;
+transition:0.2s;
+}
+
+.usuario-box b{
+font-size:15px;
+}
+
 iframe{
 width:100%;
-height:100vh;
+height:calc(100vh - 56px);
 border:none;
 }
+
+.logout-link{
+display:block;
+color:white;
+text-decoration:none;
+font-size:15px;
+padding:8px 12px;
+transition:0.2s;
+}
+
+.logout-link:hover{
+background:#084298;
+color:white;
+}
+
+
 
 </style>
 
@@ -67,9 +111,11 @@ border:none;
 
 <!-- SIDEBAR PC -->
 
-<div class="col-md-2 sidebar d-none d-md-block">
+<div class="col-md-2 sidebar d-none d-md-flex">
 
-<h4 class="text-center mt-3">Menú</h4>
+<div class="menu-links">
+
+
 
 <a href="app/views/dashboard/index.php" target="contenido">
 📊 Dashboard
@@ -82,6 +128,20 @@ border:none;
 <a href="app/views/citas/listar.php" target="contenido">
 📅 Citas
 </a>
+
+</div>
+
+<div class="usuario-box">
+
+<div class="mb-2">
+👤 <b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
+</div>
+
+<a href="app/auth/logout.php" class="logout-link">
+🔓 Cerrar sesión
+</a>
+
+</div>
 
 </div>
 
@@ -131,6 +191,22 @@ target="contenido"
 onclick="cerrarMenu()">
 📅 Citas
 </a>
+
+<hr>
+
+<div class="text-center">
+
+<div class="mb-2">
+👤 <b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
+</div>
+
+<a class="logout-link"
+href="app/auth/logout.php"
+onclick="cerrarMenu()">
+🔓 Cerrar sesión
+</a>
+
+</div>
 
 </div>
 

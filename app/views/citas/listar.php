@@ -1,5 +1,5 @@
 <?php
-
+require_once "../../middleware/auth.php";
 require_once "../../models/Cita.php";
 
 $c = new Cita();

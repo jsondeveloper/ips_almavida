@@ -1,5 +1,5 @@
 <?php
-
+require_once "../../middleware/auth.php";
 require_once "../../models/Paciente.php";
 
 $p = new Paciente();

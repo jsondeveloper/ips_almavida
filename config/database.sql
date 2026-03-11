@@ -29,6 +29,16 @@ CREATE TABLE citas (
     ON DELETE CASCADE
 );
 
+CREATE TABLE usuarios (
+
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre VARCHAR(100) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+password VARCHAR(255) NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
 INSERT INTO pacientes 
 (nombre_completo,tipo_documento,numero_documento,direccion,telefono,celular,fecha_nacimiento,edad,eps,contacto_emergencia,parentesco)
 VALUES
