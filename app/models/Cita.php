@@ -10,81 +10,104 @@ class Cita {
         $this->conn = $db->conectar();
     }
 
-    public function listar($fecha='', $paciente='', $examen=''){
-    $sql = "SELECT citas.*, pacientes.nombre_completo
-            FROM citas
-            INNER JOIN pacientes ON citas.paciente_id = pacientes.id
-            WHERE 1";
+    public function listar(){
 
-    $params = [];
-    if($fecha){
-        $sql .= " AND DATE(fecha_cita) = ?";
-        $params[] = $fecha;
-    }
-    if($paciente){
-        $sql .= " AND paciente_id = ?";
-        $params[] = $paciente;
-    }
-    if($examen){
-        $sql .= " AND tipo_examen = ?";
-        $params[] = $examen;
-    }
+        $sql = "SELECT 
+        c.*,
+        p.nombre_completo,
+        e.nombre AS empresa
 
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute($params);
+        FROM citas c
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        INNER JOIN pacientes p
+        ON c.paciente_id = p.id
+
+        LEFT JOIN empresas e
+        ON p.empresa_id = e.id
+
+        ORDER BY c.fecha_cita DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function insertar($data){
-        $sql = "INSERT INTO citas (paciente_id, tipo_examen, empresa, fecha_cita)
-                VALUES (?, ?, ?, ?)";
+
+        $sql = "INSERT INTO citas 
+        (paciente_id, tipo_examen, fecha_cita)
+        VALUES (?, ?, ?)";
+
         $stmt = $this->conn->prepare($sql);
+
         $stmt->execute([
             $data['paciente'],
             $data['examen'],
-            $data['empresa'],
-            $data['fecha'] // Ya viene convertido con espacio en el controller
+            $data['fecha']
         ]);
     }
 
     public function obtener($id){
-        $sql = "SELECT * FROM citas WHERE id=?";
+
+        $sql = "SELECT 
+        c.*,
+        p.nombre_completo,
+        e.nombre AS empresa
+
+        FROM citas c
+
+        INNER JOIN pacientes p
+        ON c.paciente_id = p.id
+
+        LEFT JOIN empresas e
+        ON p.empresa_id = e.id
+
+        WHERE c.id = ?";
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function actualizar($data){
-        $sql = "UPDATE citas SET
-                paciente_id=?,
-                tipo_examen=?,
-                empresa=?,
-                fecha_cita=?
-                WHERE id=?";
+
+        $sql = "UPDATE citas
+        SET paciente_id = ?,
+        tipo_examen = ?,
+        fecha_cita = ?
+        WHERE id = ?";
+
         $stmt = $this->conn->prepare($sql);
+
         $stmt->execute([
             $data['paciente'],
             $data['examen'],
-            $data['empresa'],
-            $data['fecha'], // Convertido en el controller
+            $data['fecha'],
             $data['id']
         ]);
     }
 
     public function eliminar($id){
+
         $sql = "DELETE FROM citas WHERE id=?";
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
     }
 
-    // Opcional: obtener todas las horas ocupadas en un día específico para un tipo de examen
     public function obtenerHorasOcupadas($fecha, $tipo_examen){
-        $sql = "SELECT DATE_FORMAT(fecha_cita, '%H:%i') as hora
-                FROM citas
-                WHERE DATE(fecha_cita) = ? AND tipo_examen = ?";
+
+        $sql = "SELECT DATE_FORMAT(fecha_cita,'%H:%i') as hora
+        FROM citas
+        WHERE DATE(fecha_cita) = ?
+        AND tipo_examen = ?";
+
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$fecha, $tipo_examen]);
+        $stmt->execute([$fecha,$tipo_examen]);
+
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
 }
