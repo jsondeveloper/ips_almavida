@@ -40,8 +40,13 @@ body{ background:#f5f7fa; }
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Tipo de documento</label>
-          <input name="tipo_documento" class="form-control" value="<?= $paciente['tipo_documento'] ?>" required pattern="CC|TI|CE">
-          <div class="invalid-feedback">Ingrese un tipo válido: CC, TI o CE.</div>
+          <select name="tipo_documento" class="form-control" required>
+              <option value="">-- Seleccione --</option>
+              <option value="CC" <?= $paciente['tipo_documento']=='CC'?'selected':'' ?>>CC</option>
+              <option value="TI" <?= $paciente['tipo_documento']=='TI'?'selected':'' ?>>TI</option>
+              <option value="CE" <?= $paciente['tipo_documento']=='CE'?'selected':'' ?>>CE</option>
+          </select>
+          <div class="invalid-feedback">Seleccione un tipo válido.</div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -64,19 +69,19 @@ body{ background:#f5f7fa; }
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Celular</label>
-          <input name="celular" class="form-control" value="<?= $paciente['celular'] ?>" required pattern="\d{10}">
+          <input name="celular" id="celular" class="form-control" value="<?= $paciente['celular'] ?>" required pattern="\d{10}">
           <div class="invalid-feedback">10 dígitos.</div>
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Fecha de nacimiento</label>
-          <input type="date" name="fecha" class="form-control" value="<?= $paciente['fecha_nacimiento'] ?>" required>
+          <input type="date" name="fecha" id="fechaNacimiento" class="form-control" value="<?= $paciente['fecha_nacimiento'] ?>" required>
           <div class="invalid-feedback">La fecha es obligatoria.</div>
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Edad</label>
-          <input name="edad" type="number" min="0" max="120" class="form-control" value="<?= $paciente['edad'] ?>" required>
+          <input name="edad" id="edadPaciente" type="number" min="0" max="120" class="form-control" value="<?= $paciente['edad'] ?>" required readonly>
           <div class="invalid-feedback">Ingrese una edad válida.</div>
         </div>
 
@@ -88,7 +93,7 @@ body{ background:#f5f7fa; }
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Contacto de emergencia</label>
-          <input name="contacto" class="form-control" value="<?= $paciente['contacto_emergencia'] ?>" required>
+          <input name="contacto" class="form-control" placeholder="Teléfono de contacto de emergencia" value="<?= $paciente['contacto_emergencia'] ?>" required>
           <div class="invalid-feedback">Obligatorio.</div>
         </div>
 
@@ -109,12 +114,30 @@ body{ background:#f5f7fa; }
 </div>
 
 <script>
-// Mismo script de validación que funciona en crear.php
+// Función para calcular edad
+function calcularEdad(fechaNacimiento) {
+    if (!fechaNacimiento) return '';
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+        edad--;
+    }
+    return edad;
+}
+
+// Actualiza la edad cuando se selecciona la fecha
+document.getElementById('fechaNacimiento').addEventListener('change', function() {
+    document.getElementById('edadPaciente').value = calcularEdad(this.value);
+});
+
+// Validación de formulario
 document.getElementById('formPaciente').addEventListener('submit', function(e){
     const form = e.target;
     let valido = true;
 
-    form.querySelectorAll('input').forEach(input => {
+    form.querySelectorAll('input, select').forEach(input => {
         if(!input.checkValidity()){
             input.classList.add('is-invalid');
             input.classList.remove('is-valid');

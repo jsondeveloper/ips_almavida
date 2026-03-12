@@ -12,7 +12,6 @@ require_once "../../middleware/auth.php";
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-
 body{
     background:#f5f7fa;
 }
@@ -26,7 +25,6 @@ body{
 .is-invalid { border-color: #dc3545; }
 .is-valid { border-color: #28a745; }
 .invalid-feedback { color:#dc3545; display:none; }
-
 </style>
 
 </head>
@@ -34,7 +32,6 @@ body{
 <body class="container-fluid mt-4">
 
 <div class="card shadow">
-
 <div class="card-body">
 
 <h3 class="mb-4">➕ Registrar Paciente</h3>
@@ -51,8 +48,13 @@ body{
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Tipo de documento</label>
-<input name="tipo_documento" class="form-control" placeholder="CC / TI / CE" required pattern="CC|TI|CE">
-<div class="invalid-feedback">Ingrese un tipo válido: CC, TI o CE.</div>
+<select name="tipo_documento" class="form-control" required>
+    <option value="">-- Seleccione --</option>
+    <option value="CC">CC</option>
+    <option value="TI">TI</option>
+    <option value="CE">CE</option>
+</select>
+<div class="invalid-feedback">Seleccione un tipo válido.</div>
 </div>
 
 <div class="col-md-6 mb-3">
@@ -75,19 +77,19 @@ body{
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Celular</label>
-<input name="celular" class="form-control" placeholder="Celular" required pattern="\d{10}">
+<input name="celular" id="celular" class="form-control" placeholder="Celular" required pattern="\d{10}">
 <div class="invalid-feedback">10 dígitos.</div>
 </div>
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Fecha de nacimiento</label>
-<input type="date" name="fecha" class="form-control" required>
+<input type="date" name="fecha" id="fechaNacimiento" class="form-control" required>
 <div class="invalid-feedback">La fecha es obligatoria.</div>
 </div>
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Edad</label>
-<input name="edad" class="form-control" placeholder="Edad" type="number" min="0" max="120" required>
+<input name="edad" id="edadPaciente" class="form-control" placeholder="Edad" type="number" min="0" max="120" required readonly>
 <div class="invalid-feedback">Ingrese una edad válida.</div>
 </div>
 
@@ -99,7 +101,7 @@ body{
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Contacto de emergencia</label>
-<input name="contacto" class="form-control" placeholder="Contacto emergencia" required>
+<input name="contacto" class="form-control" placeholder="Teléfono de contacto de emergencia" required>
 <div class="invalid-feedback">Obligatorio.</div>
 </div>
 
@@ -122,16 +124,33 @@ body{
 </form>
 
 </div>
-
 </div>
 
 <script>
+// Función para calcular edad
+function calcularEdad(fechaNacimiento) {
+    if (!fechaNacimiento) return '';
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+        edad--;
+    }
+    return edad;
+}
+
+// Actualiza la edad cuando se selecciona la fecha
+document.getElementById('fechaNacimiento').addEventListener('change', function() {
+    document.getElementById('edadPaciente').value = calcularEdad(this.value);
+});
+
 // Validación de formulario
 document.getElementById('formPaciente').addEventListener('submit', function(e){
     const form = e.target;
     let valido = true;
 
-    form.querySelectorAll('input').forEach(input => {
+    form.querySelectorAll('input, select').forEach(input => {
         if(!input.checkValidity()){
             input.classList.add('is-invalid');
             input.classList.remove('is-valid');
@@ -145,7 +164,7 @@ document.getElementById('formPaciente').addEventListener('submit', function(e){
     });
 
     if(!valido){
-        e.preventDefault(); // evita enviar si hay errores
+        e.preventDefault();
     }
 });
 </script>
