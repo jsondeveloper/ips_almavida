@@ -1,9 +1,13 @@
 <?php
 require_once "../../middleware/auth.php";
 require_once "../../models/Paciente.php";
+require_once "../../models/Cita.php";
 
 $p = new Paciente();
+$c = new Cita();
+
 $pacientes = $p->listar();
+$examenes = ["Sangre", "Orina", "Rayos X", "Ultrasonido", "Electrocardiograma"];
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +19,6 @@ $pacientes = $p->listar();
 <style>
 body{ background:#f5f7fa; }
 .card{ border:none; border-radius:10px; }
-/* Validaciones visuales */
 .is-invalid { border-color: #dc3545; }
 .is-valid { border-color: #28a745; }
 .invalid-feedback { color:#dc3545; display:none; }
@@ -30,7 +33,6 @@ body{ background:#f5f7fa; }
     <form id="formCita" action="../../controllers/CitaController.php?accion=guardar" method="POST" novalidate>
 
       <div class="row">
-
         <div class="col-md-6 mb-3">
           <label class="form-label">Paciente</label>
           <select name="paciente" class="form-control" required>
@@ -44,8 +46,13 @@ body{ background:#f5f7fa; }
 
         <div class="col-md-6 mb-3">
           <label class="form-label">Tipo de examen</label>
-          <input name="examen" class="form-control" placeholder="Tipo examen" required>
-          <div class="invalid-feedback">El tipo de examen es obligatorio.</div>
+          <select name="examen" id="examen" class="form-control" required>
+            <option value="">-- Seleccione un examen --</option>
+            <?php foreach($examenes as $exam){ ?>
+              <option value="<?= $exam ?>"><?= $exam ?></option>
+            <?php } ?>
+          </select>
+          <div class="invalid-feedback">Debe seleccionar un tipo de examen.</div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -55,11 +62,18 @@ body{ background:#f5f7fa; }
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="form-label">Fecha y hora</label>
-          <input type="datetime-local" name="fecha" class="form-control" required>
-          <div class="invalid-feedback">Debe seleccionar fecha y hora.</div>
+          <label class="form-label">Fecha</label>
+          <input type="date" id="fecha" class="form-control" required>
+          <div class="invalid-feedback">Debe seleccionar una fecha.</div>
         </div>
 
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Hora</label>
+          <select name="fecha" id="hora" class="form-control" required>
+            <option value="">-- Seleccione una hora --</option>
+          </select>
+          <div class="invalid-feedback">Debe seleccionar una hora disponible.</div>
+        </div>
       </div>
 
       <button type="submit" class="btn btn-success">💾 Guardar Cita</button>
@@ -70,6 +84,7 @@ body{ background:#f5f7fa; }
 </div>
 
 <script>
+// Validación del formulario
 document.getElementById('formCita').addEventListener('submit', function(e){
     const form = e.target;
     let valido = true;
@@ -79,25 +94,43 @@ document.getElementById('formCita').addEventListener('submit', function(e){
             input.classList.add('is-invalid');
             input.classList.remove('is-valid');
             const feedback = input.nextElementSibling;
-            if(feedback && feedback.classList.contains('invalid-feedback')){
-                feedback.style.display = 'block';
-            }
+            if(feedback && feedback.classList.contains('invalid-feedback')) feedback.style.display='block';
             valido = false;
         } else {
             input.classList.remove('is-invalid');
             input.classList.add('is-valid');
             const feedback = input.nextElementSibling;
-            if(feedback && feedback.classList.contains('invalid-feedback')){
-                feedback.style.display = 'none';
-            }
+            if(feedback && feedback.classList.contains('invalid-feedback')) feedback.style.display='none';
         }
     });
 
-    if(!valido){
-        e.preventDefault();
-    }
+    if(!valido) e.preventDefault();
 });
-</script>
 
+// Cargar horas disponibles
+const fechaInput = document.getElementById('fecha');
+const examenInput = document.getElementById('examen');
+const horaSelect = document.getElementById('hora');
+
+function cargarHorasDisponibles(){
+    const fecha = fechaInput.value;
+    const examen = examenInput.value;
+    if(!fecha || !examen) return;
+
+    fetch(`../../controllers/CitaController.php?accion=horas_ocupadas&fecha=${fecha}&examen=${examen}`)
+    .then(res => res.json())
+    .then(ocupadas => {
+        horaSelect.innerHTML = '<option value="">-- Seleccione una hora --</option>';
+        for(let h=8; h<=17; h++){
+            let horaStr = h.toString().padStart(2,'0') + ':00';
+            let disabled = ocupadas.includes(horaStr) ? 'disabled' : '';
+            horaSelect.innerHTML += `<option value="${fecha}T${horaStr}" ${disabled}>${horaStr}</option>`;
+        }
+    });
+}
+
+fechaInput.addEventListener('change', cargarHorasDisponibles);
+examenInput.addEventListener('change', cargarHorasDisponibles);
+</script>
 </body>
 </html>
