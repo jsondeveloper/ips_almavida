@@ -17,7 +17,7 @@ if($accion=="login"){
 
     if($user && password_verify($password,$user['password'])){
         $_SESSION['usuario']=$user['nombre'];
-        header("Location: ../../index.php");
+        header("Location: ../../");
         exit;
     } else {
         // Redirigir al login con error

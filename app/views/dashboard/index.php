@@ -30,17 +30,17 @@ $pacientesEdad=[
 "50+"=>0
 ];
 
-$horasCitas=[];
-
+$horas=[];
 for($h=8;$h<=17;$h++){
 $hora=str_pad($h,2,"0",STR_PAD_LEFT).":00";
-$horasCitas[$hora]=0;
+$horas[]=$hora;
 }
+
+$citasPorTipoHora=[];
 
 foreach($citas as $cita){
 
 $fecha=date("Y-m-d",strtotime($cita['fecha_cita']));
-
 if($fecha==$hoy) $citasHoy++;
 
 $tipo=$cita['tipo_examen'] ?? "No definido";
@@ -48,8 +48,14 @@ $tiposExamen[$tipo]=($tiposExamen[$tipo]??0)+1;
 
 $hora=date("H:00",strtotime($cita['fecha_cita']));
 
-if(isset($horasCitas[$hora])){
-$horasCitas[$hora]++;
+if(!isset($citasPorTipoHora[$tipo])){
+foreach($horas as $h){
+$citasPorTipoHora[$tipo][$h]=0;
+}
+}
+
+if(isset($citasPorTipoHora[$tipo][$hora])){
+$citasPorTipoHora[$tipo][$hora]++;
 }
 
 }
@@ -68,6 +74,29 @@ elseif($edad<=50) $pacientesEdad["41-50"]++;
 else $pacientesEdad["50+"]++;
 
 }
+
+$datasets=[];
+$colores=["#1E6FB8","#2FBF71","#1FA89A","#0F4C81","#7ED957"];
+
+$i=0;
+
+foreach($citasPorTipoHora as $tipo=>$datos){
+
+$color=$colores[$i % count($colores)];
+
+$datasets[]=[
+"label"=>$tipo,
+"data"=>array_values($datos),
+"borderColor"=>$color,
+"backgroundColor"=>$color,
+"fill"=>false,
+"tension"=>0.4
+];
+
+$i++;
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -77,20 +106,19 @@ else $pacientesEdad["50+"]++;
 <meta charset="UTF-8">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
 
 <style>
 
 body{
 background:#F7FAFC;
-font-family:system-ui,-apple-system,Segoe UI,Roboto;
-color:#333;
+font-family:system-ui;
 }
 
-/* CARDS INDICADORES */
+/* CARDS */
+
+/* CARDS */
 
 .card-counter{
 background:white;
@@ -101,8 +129,67 @@ display:flex;
 align-items:center;
 gap:15px;
 box-shadow:0 2px 6px rgba(0,0,0,0.04);
+
+opacity:0;
+transform:translateY(20px) scale(.96);
+animation:cardEntrada .5s ease forwards;
 }
 
+.delay-1{animation-delay:.05s;}
+.delay-2{animation-delay:.15s;}
+.delay-3{animation-delay:.25s;}
+.delay-4{animation-delay:.35s;}
+
+@keyframes cardEntrada{
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+/* GRAFICOS */
+
+.chart-box{
+background:white;
+padding:18px;
+border-radius:10px;
+border:1px solid #E6E6E6;
+margin-bottom:20px;
+opacity:0;
+}
+
+/* GRAFICOS MEDIOS */
+
+.chart-left{
+transform:translateX(-30px);
+animation:fadeLeft .6s ease forwards;
+}
+
+.chart-delay-1{animation-delay:.15s;}
+.chart-delay-2{animation-delay:.25s;}
+.chart-delay-3{animation-delay:.35s;}
+
+@keyframes fadeLeft{
+to{
+opacity:1;
+transform:translateX(0);
+}
+}
+
+/* GRAFICO INFERIOR */
+
+.chart-bottom{
+transform:translateY(50px);
+animation:fadeUp .6s ease forwards;
+animation-delay:.25s;
+}
+
+@keyframes fadeUp{
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 .icon-box{
 width:45px;
 height:45px;
@@ -114,44 +201,23 @@ font-size:22px;
 color:white;
 }
 
-.icon-pacientes{ background:#1E6FB8; }
-.icon-citas{ background:#1FA89A; }
-.icon-empresas{ background:#0F4C81; }
-.icon-hoy{ background:#2FBF71; }
-
-.counter-title{
-font-size:14px;
-color:#666;
-margin-bottom:2px;
-}
+.icon-pacientes{background:#1E6FB8;}
+.icon-citas{background:#1FA89A;}
+.icon-empresas{background:#0F4C81;}
+.icon-hoy{background:#2FBF71;}
 
 .counter-number{
-font-size:22px;
+font-size:24px;
 font-weight:600;
 color:#0F4C81;
 }
 
-/* GRÁFICOS */
-
-.chart-box{
-background:white;
-padding:18px;
-border-radius:10px;
-border:1px solid #E6E6E6;
-box-shadow:0 2px 6px rgba(0,0,0,0.04);
-}
-
-.chart-title{
-font-weight:600;
-margin-bottom:10px;
-color:#0F4C81;
-font-size:15px;
-}
-#chartHoras {
-    height: 160px !important;
-}
 .timeline{
-height:210px;
+height:230px;
+}
+
+#chartHoras{
+height:180px!important;
 }
 
 </style>
@@ -163,91 +229,71 @@ height:210px;
 <div class="row g-3">
 
 <div class="col-md-3">
-<div class="card-counter">
-<div class="icon-box icon-pacientes">
-<i class="bi bi-person"></i>
-</div>
-<div>
-<div class="counter-title">Pacientes</div>
-<div class="counter-number"><?= $totalPacientes ?></div>
-</div>
+<div class="card-counter delay-1">
+<div class="icon-box icon-pacientes"><i class="bi bi-person"></i></div>
+<div>Pacientes<div class="counter-number" data-target="<?= $totalPacientes ?>">0</div></div>
 </div>
 </div>
 
 <div class="col-md-3">
-<div class="card-counter">
-<div class="icon-box icon-citas">
-<i class="bi bi-clock-history"></i>
-</div>
-<div>
-<div class="counter-title">Citas</div>
-<div class="counter-number"><?= $totalCitas ?></div>
-</div>
+<div class="card-counter delay-2">
+<div class="icon-box icon-citas"><i class="bi bi-clock-history"></i></div>
+<div>Citas<div class="counter-number" data-target="<?= $totalCitas ?>">0</div></div>
 </div>
 </div>
 
 <div class="col-md-3">
-<div class="card-counter">
-<div class="icon-box icon-empresas">
-<i class="bi bi-building"></i>
-</div>
-<div>
-<div class="counter-title">Empresas</div>
-<div class="counter-number"><?= $totalEmpresas ?></div>
-</div>
+<div class="card-counter delay-3">
+<div class="icon-box icon-empresas"><i class="bi bi-building"></i></div>
+<div>Empresas<div class="counter-number" data-target="<?= $totalEmpresas ?>">0</div></div>
 </div>
 </div>
 
 <div class="col-md-3">
-<div class="card-counter">
-<div class="icon-box icon-hoy">
-<i class="bi bi-calendar-check"></i>
-</div>
-<div>
-<div class="counter-title">Citas Hoy</div>
-<div class="counter-number"><?= $citasHoy ?></div>
-</div>
+<div class="card-counter delay-4">
+<div class="icon-box icon-hoy"><i class="bi bi-calendar-check"></i></div>
+<div>Citas Hoy<div class="counter-number" data-target="<?= $citasHoy ?>">0</div></div>
 </div>
 </div>
 
 </div>
-
-
 
 <div class="row mt-4">
 
 <div class="col-md-4">
-<div class="chart-box">
-<div class="chart-title">Citas por Tipo de Examen</div>
+<div class="chart-box chart-left chart-delay-1">
+Citas por Tipo de Examen
 <canvas id="chartExamen"></canvas>
 </div>
 </div>
 
 <div class="col-md-4">
-<div class="chart-box">
-<div class="chart-title">Pacientes por EPS</div>
+<div class="chart-box chart-left chart-delay-2">
+Pacientes por EPS
 <canvas id="chartEPS"></canvas>
 </div>
 </div>
 
 <div class="col-md-4">
-<div class="chart-box">
-<div class="chart-title">Pacientes por Edad</div>
+<div class="chart-box chart-left chart-delay-3">
+Pacientes por Edad
 <canvas id="chartEdad"></canvas>
 </div>
 </div>
 
+
+
+
+
 </div>
 
-
-
-<div class="row mt-4">
+<div class="row">
 
 <div class="col-md-12">
 
-<div class="chart-box timeline">
+<div class="chart-box chart-bottom timeline">
 
-<div class="chart-title">Horas con Más Citas</div>
+Horas con Más Citas por Tipo de Examen
 
 <canvas id="chartHoras"></canvas>
 
@@ -256,12 +302,43 @@ height:210px;
 </div>
 
 </div>
-
-
-
+<canvas></canvas>
 <script>
 
-const coloresMarca=[
+document.addEventListener("DOMContentLoaded", function(){
+
+/* CONTADORES */
+
+const counters=document.querySelectorAll(".counter-number");
+
+counters.forEach(counter=>{
+
+const target=parseInt(counter.dataset.target);
+const duration=1200;
+let startTime=null;
+
+function animate(timestamp){
+
+if(!startTime) startTime=timestamp;
+
+const progress=timestamp-startTime;
+const value=Math.min(Math.floor((progress/duration)*target),target);
+
+counter.textContent=value;
+
+if(progress<duration){
+requestAnimationFrame(animate);
+}
+
+}
+
+requestAnimationFrame(animate);
+
+});
+
+/* COLORES */
+
+const colores=[
 "#1E6FB8",
 "#2FBF71",
 "#1FA89A",
@@ -269,66 +346,78 @@ const coloresMarca=[
 "#7ED957"
 ];
 
-const ctxExamen=document.getElementById("chartExamen").getContext("2d");
-const ctxEPS=document.getElementById("chartEPS").getContext("2d");
-const ctxEdad=document.getElementById("chartEdad").getContext("2d");
-const ctxHoras=document.getElementById("chartHoras").getContext("2d");
+/* GRAFICOS */
 
-
-new Chart(ctxExamen,{
+new Chart(document.getElementById("chartExamen"),{
 type:"pie",
 data:{
 labels:<?=json_encode(array_keys($tiposExamen))?>,
 datasets:[{
 data:<?=json_encode(array_values($tiposExamen))?>,
-backgroundColor:coloresMarca
+backgroundColor:colores
 }]
+},
+options:{
+animation:{
+animateRotate:true,
+animateScale:true,
+duration:1500
+},
+plugins:{legend:{position:"bottom"}}
 }
 });
 
-
-new Chart(ctxEPS,{
+new Chart(document.getElementById("chartEPS"),{
 type:"doughnut",
 data:{
 labels:<?=json_encode(array_keys($pacientesEPS))?>,
 datasets:[{
 data:<?=json_encode(array_values($pacientesEPS))?>,
-backgroundColor:coloresMarca
+backgroundColor:colores
 }]
+},
+options:{
+animation:{
+animateRotate:true,
+animateScale:true,
+duration:1750
+},
+plugins:{legend:{position:"bottom"}}
 }
 });
 
-
-new Chart(ctxEdad,{
+new Chart(document.getElementById("chartEdad"),{
 type:"pie",
 data:{
 labels:<?=json_encode(array_keys($pacientesEdad))?>,
 datasets:[{
 data:<?=json_encode(array_values($pacientesEdad))?>,
-backgroundColor:coloresMarca
-}]
-}
-});
-
-
-new Chart(ctxHoras,{
-type:"line",
-data:{
-labels:<?=json_encode(array_keys($horasCitas))?>,
-datasets:[{
-label:"Cantidad de Citas",
-data:<?=json_encode(array_values($horasCitas))?>,
-borderColor:"#1E6FB8",
-backgroundColor:"rgba(30,111,184,0.15)",
-fill:true,
-tension:0.4
+backgroundColor:colores
 }]
 },
 options:{
+animation:{
+animateRotate:true,
+animateScale:true,
+duration:2000
+},
+plugins:{legend:{position:"bottom"}}
+}
+});
+
+new Chart(document.getElementById("chartHoras"),{
+type:"line",
+data:{
+labels:<?=json_encode($horas)?>,
+datasets:<?=json_encode($datasets)?>
+},
+options:{
 maintainAspectRatio:false,
-plugins:{legend:{display:false}},
+plugins:{legend:{position:"top"}},
 scales:{y:{beginAtZero:true}}
 }
+});
+
 });
 
 </script>

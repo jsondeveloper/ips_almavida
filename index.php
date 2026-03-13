@@ -11,7 +11,6 @@ require_once "app/middleware/auth.php";
 <title>Sistema IPS Alma Vida</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 <style>
@@ -22,24 +21,22 @@ margin:0;
 background:#F7FAFC;
 font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
 }
+
+/* FOOTER */
+
 footer{
-       background: #7ED957;
-background: linear-gradient(90deg, rgba(126, 217, 87, 1) 0%, rgba(47, 191, 113, 1) 25%, rgba(31, 168, 154, 1) 50%, rgba(30, 111, 184, 1) 75%, rgba(15, 76, 129, 1) 100%);
-    height: 5px;
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
+background:linear-gradient(90deg,#7ED957 0%,#2FBF71 25%,#1FA89A 50%,#1E6FB8 75%,#0F4C81 100%);
+height:5px;
+position:fixed;
+bottom:0;
+width:100%;
 }
+
 /* NAVBAR */
 
 .navbar1{
-background: #1E6FB8;
-height: 5px !important;
-background: linear-gradient(90deg, rgba(30, 111, 184, 1) 0%, rgba(15, 76, 129, 1) 25%, rgba(31, 168, 154, 1) 50%, rgba(47, 191, 113, 1) 75%, rgba(126, 217, 87, 1) 100%);
-}
-
-.navbar-brand{
-font-weight:600;
+background:linear-gradient(90deg,#1E6FB8,#0F4C81,#1FA89A,#2FBF71,#7ED957);
+height:5px !important;
 }
 
 /* SIDEBAR */
@@ -50,7 +47,38 @@ background:#FFFFFF;
 border-right:1px solid #E6E6E6;
 display:flex;
 flex-direction:column;
+
+animation:sidebarEntrada .5s ease;
 }
+
+@keyframes sidebarEntrada{
+from{
+opacity:0;
+transform:translateX(-40px);
+}
+to{
+opacity:1;
+transform:translateX(0);
+}
+}
+
+/* LOGO */
+
+.logo{
+margin-bottom:1rem;
+opacity:0;
+transform:scale(.9);
+animation:logoAnim .6s ease forwards;
+}
+
+@keyframes logoAnim{
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+/* MENU */
 
 .sidebar a{
 color:#333;
@@ -58,8 +86,26 @@ text-decoration:none;
 display:block;
 padding:14px 18px;
 font-size:15px;
-transition:0.2s;
+transition:0.25s;
 border-left:3px solid transparent;
+
+opacity:0;
+transform:translateX(-15px);
+}
+
+/* MENU ESCALONADO */
+
+.sidebar a:nth-child(1){animation:itemMenu .4s .2s forwards;}
+.sidebar a:nth-child(2){animation:itemMenu .4s .3s forwards;}
+.sidebar a:nth-child(3){animation:itemMenu .4s .4s forwards;}
+.sidebar a:nth-child(4){animation:itemMenu .4s .5s forwards;}
+.sidebar a:nth-child(5){animation:itemMenu .4s .6s forwards;}
+
+@keyframes itemMenu{
+to{
+opacity:1;
+transform:translateX(0);
+}
 }
 
 .sidebar a i{
@@ -69,6 +115,7 @@ margin-right:8px;
 
 .sidebar a:hover{
 background:#F4F8FB;
+transform:translateX(3px);
 }
 
 .menu-links{
@@ -94,10 +141,6 @@ padding:0 18px;
 font-size:14px;
 }
 
-.usuario-box b{
-font-weight:600;
-}
-
 .logout-link{
 display:block;
 color:#555;
@@ -112,47 +155,35 @@ background:#F4F8FB;
 color:#0F4C81;
 }
 
-/* CONTENIDO */
+/* IFRAME ANIMADO */
 
 iframe{
 width:100%;
 height:calc(100vh - 14px);
 border:none;
 background:white;
+
+opacity:0;
+transform:translateY(20px) scale(.98);
+transition:opacity 1s ease, transform 1s ease;
 }
 
-
-
-/* OFFCANVAS */
-
-.offcanvas.sidebar{
-background:#FFFFFF;
+iframe.loaded{
+opacity:1;
+transform:translateY(0) scale(1);
 }
 
-.offcanvas a{
-color:#333;
-}
-
-.offcanvas a i{
-color:#1E6FB8;
-margin-right:8px;
-}
-
-.logo{
-    margin-bottom:1rem;
+iframe.salida{
+opacity:0;
+transform:translateY(-20px) scale(.98);
 }
 
 </style>
 </head>
 
-
-
 <body>
 
-<!-- NAVBAR -->
-
 <nav class="navbar1">
-
 
 <button class="btn btn-light d-md-none me-3"
 data-bs-toggle="offcanvas"
@@ -162,218 +193,81 @@ data-bs-target="#menu">
 
 </button>
 
-
-
-</div>
-
-
-
-</div>
-
 </nav>
 
-<!-- LAYOUT -->
-
 <div class="container-fluid">
-
 <div class="row">
 
-<!-- SIDEBAR PC -->
-
 <div class="col-md-2 sidebar d-none d-md-flex">
-    <img class="logo" src="img/logo1.png">
+
+<img class="logo" src="img/logo1.png">
 
 <div class="menu-links">
 
 <a href="app/views/dashboard/index.php" target="contenido">
-
-<i class="bi bi-speedometer2"></i>
-Dashboard
-
+<i class="bi bi-speedometer2"></i> Dashboard
 </a>
 
 <a href="app/views/empresas/listar.php" target="contenido">
-
-<i class="bi bi-building"></i>
-Empresas
-
+<i class="bi bi-building"></i> Empresas
 </a>
 
 <a href="app/views/pacientes/listar.php" target="contenido">
-
-<i class="bi bi-person"></i>
-Pacientes
-
+<i class="bi bi-person"></i> Pacientes
 </a>
 
 <a href="app/views/citas/listar.php" target="contenido">
-
-<i class="bi bi-clock-history"></i>
-Citas
-
+<i class="bi bi-clock-history"></i> Citas
 </a>
 
 <a href="app/views/dashboard/calendario.php" target="contenido">
-
-<i class="bi bi-calendar3"></i>
-Calendario
-
+<i class="bi bi-calendar3"></i> Calendario
 </a>
 
 </div>
 
-
 <div class="usuario-box">
-<div class="mb-2">
 
+<div class="mb-2">
 <i class="bi bi-person-circle"></i>
 <b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
-
 </div>
 
 <a href="app/auth/logout.php" class="logout-link">
-
-<i class="bi bi-box-arrow-right"></i>
-Cerrar sesión
-
+<i class="bi bi-box-arrow-right"></i> Cerrar sesión
 </a>
 
 </div>
 
 </div>
-
-<!-- CONTENIDO -->
 
 <div class="col-md-10 p-0">
 
 <iframe
 name="contenido"
 src="app/views/dashboard/index.php">
-
 </iframe>
 
 </div>
 
 </div>
-
-</div>
-
-<!-- MENU MOVIL -->
-
-<div class="offcanvas offcanvas-start sidebar" tabindex="-1" id="menu">
-
-<div class="offcanvas-header">
-
-<h5 class="fw-semibold">Menú</h5>
-
-<button
-type="button"
-class="btn-close"
-data-bs-dismiss="offcanvas">
-
-</button>
-
-</div>
-
-<div class="offcanvas-body">
-
-<a class="d-block p-3"
-href="app/views/dashboard/index.php"
-target="contenido"
-onclick="cerrarMenu()">
-
-<i class="bi bi-speedometer2"></i>
-Dashboard
-
-</a>
-
-<a class="d-block p-3"
-href="app/views/empresas/listar.php"
-target="contenido"
-onclick="cerrarMenu()">
-
-<i class="bi bi-building"></i>
-Empresas
-
-</a>
-
-<a class="d-block p-3"
-href="app/views/pacientes/listar.php"
-target="contenido"
-onclick="cerrarMenu()">
-
-<i class="bi bi-person"></i>
-Pacientes
-
-</a>
-
-<a class="d-block p-3"
-href="app/views/citas/listar.php"
-target="contenido"
-onclick="cerrarMenu()">
-
-<i class="bi bi-clock-history"></i>
-Citas
-
-</a>
-
-<a class="d-block p-3"
-href="app/views/dashboard/calendario.php"
-target="contenido"
-onclick="cerrarMenu()">
-
-<i class="bi bi-calendar3"></i>
-Calendario
-
-</a>
-
-<hr>
-
-<div class="text-center">
-
-<div class="mb-2">
-
-<i class="bi bi-person-circle"></i>
-<b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
-
-</div>
-
-<a class="logout-link"
-href="app/auth/logout.php"
-onclick="cerrarMenu()">
-
-<i class="bi bi-box-arrow-right"></i>
-Cerrar sesión
-
-</a>
-
-</div>
-
-</div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 
-function cerrarMenu(){
+const links=document.querySelectorAll('.menu-links a');
+const iframe=document.querySelector('iframe[name="contenido"]');
 
-var menu = document.getElementById('menu');
-
-var offcanvas = bootstrap.Offcanvas.getInstance(menu);
-
-if(offcanvas) offcanvas.hide();
-
-}
-
-const links = document.querySelectorAll('.menu-links a');
-
-const iframe = document.querySelector('iframe[name="contenido"]');
+/* CUANDO CARGA UNA PAGINA */
 
 iframe.addEventListener('load',()=>{
 
-const src = iframe.contentWindow.location.pathname;
+iframe.classList.remove("salida");
+iframe.classList.add("loaded");
+
+const src=iframe.contentWindow.location.pathname;
 
 links.forEach(link=>link.classList.remove('active'));
 
@@ -387,7 +281,22 @@ link.classList.add('active');
 
 });
 
+/* CUANDO DAN CLICK */
+
+links.forEach(link=>{
+
+link.addEventListener("click",()=>{
+
+iframe.classList.remove("loaded");
+iframe.classList.add("salida");
+
+});
+
+});
+
 </script>
+
 <footer></footer>
+
 </body>
 </html>
