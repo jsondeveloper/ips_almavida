@@ -3,7 +3,7 @@ require_once "../../middleware/auth.php";
 require_once "../../models/Empresa.php";
 
 $e = new Empresa();
-$empresas = $e->listar();
+$empresas = $e->listarConEmpleados(); // <-- usamos el método optimizado
 ?>
 
 <!DOCTYPE html>
@@ -15,11 +15,13 @@ $empresas = $e->listar();
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
 <script>
 document.addEventListener("contextmenu", function(e){
-e.preventDefault();
+    e.preventDefault();
 });
 </script>
+
 <style>
 body {
     background: #f5f7fa;
@@ -92,6 +94,7 @@ input, select { border-radius:8px; border:1px solid #E6E6E6; padding:6px 10px; }
 <th>NIT</th>
 <th>Dirección</th>
 <th>Teléfono</th>
+<th class="text-center">Pacientes</th> <!-- NUEVA COLUMNA -->
 <th class="text-center">Acciones</th>
 </tr>
 </thead>
@@ -102,6 +105,7 @@ input, select { border-radius:8px; border:1px solid #E6E6E6; padding:6px 10px; }
 <td><?= htmlspecialchars($empresa['nit']) ?></td>
 <td><?= htmlspecialchars($empresa['direccion']) ?></td>
 <td><?= htmlspecialchars($empresa['telefono']) ?></td>
+<td class="text-center"><?= $empresa['cantidad_empleados'] ?></td> <!-- NUEVA COLUMNA -->
 <td class="text-center">
     <div class="d-flex justify-content-center flex-wrap gap-1">
         <button class="btn btn-guardar btn-sm btn-editar btn-lightbox" data-id="<?= $empresa['id'] ?>"><i class="bi bi-pencil-square"></i></button>
@@ -143,7 +147,6 @@ function cargarFormulario(url){
         const form = contenidoModal.querySelector('form');
         if(!form) return;
 
-        // Validación y submit
         form.addEventListener('submit', function(e){
             e.preventDefault();
             let valido = true;
@@ -175,10 +178,8 @@ function cargarFormulario(url){
     });
 }
 
-// Crear
 document.getElementById('btnCrear').addEventListener('click', ()=> cargarFormulario('crear.php'));
 
-// Editar
 document.querySelectorAll('.btn-lightbox').forEach(btn=>{
     btn.addEventListener('click', ()=> {
         const id = btn.dataset.id;
@@ -186,7 +187,6 @@ document.querySelectorAll('.btn-lightbox').forEach(btn=>{
     });
 });
 
-// Buscador
 const filas = document.querySelectorAll('#tablaEmpresas tbody tr');
 const buscador = document.getElementById('buscador');
 const limpiarFiltros = document.getElementById('limpiarFiltros');

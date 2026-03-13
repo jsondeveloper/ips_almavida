@@ -9,8 +9,24 @@ class Empresa {
         $this->conn = $db->conectar();
     }
 
+    // Listar empresas normales
     public function listar() {
         $sql = "SELECT * FROM empresas ORDER BY nombre";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Listar empresas con cantidad de pacientes (optimizado)
+    public function listarConEmpleados() {
+        $sql = "
+            SELECT e.*, 
+                   COUNT(p.id) AS cantidad_empleados
+            FROM empresas e
+            LEFT JOIN pacientes p ON p.empresa_id = e.id
+            GROUP BY e.id
+            ORDER BY e.nombre
+        ";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
