@@ -52,7 +52,11 @@ $eventos[] = [
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-
+<script>
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+</script>
 <style>
 
 html,body{
@@ -60,6 +64,10 @@ height:100%;
 margin:0;
 background:#F7FAFC;
 font-family:system-ui,-apple-system,Segoe UI,Roboto;
+user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
 }
 
 #calendar{

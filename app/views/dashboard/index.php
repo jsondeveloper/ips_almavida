@@ -108,12 +108,20 @@ $i++;
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-
+<script>
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+</script>
 <style>
 
 body{
 background:#F7FAFC;
 font-family:system-ui;
+user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
 }
 
 /* CARDS */

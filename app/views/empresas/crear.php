@@ -8,11 +8,19 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+<script>
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+</script>
 <style>
-body{
-    background:#f5f7fa;
-    font-family:'Segoe UI', sans-serif;
+body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', sans-serif;
+    user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
 }
 
 .card{

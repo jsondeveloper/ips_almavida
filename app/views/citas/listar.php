@@ -15,9 +15,20 @@ $citas = $c->listar();
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+<script>
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+</script>
 <style>
-body { background:#f5f7fa; font-family:'Segoe UI', sans-serif; }
+body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', sans-serif;
+    user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+}
 .card { border:none; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
 .toolbar { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; align-items:center; }
 .toolbar h3 { flex:1; margin:0; color:#0F4C81; font-weight:600; }

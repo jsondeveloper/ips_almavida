@@ -12,7 +12,12 @@ require_once "app/middleware/auth.php";
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+<link rel="icon" href="img/icon.png" type="image/png">
+<script>
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+</script>
 <style>
 
 html,body{
@@ -20,6 +25,10 @@ height:100%;
 margin:0;
 background:#F7FAFC;
 font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
 }
 
 /* FOOTER */
@@ -164,18 +173,15 @@ border:none;
 background:white;
 
 opacity:0;
-transform:translateY(20px) scale(.98);
 transition:opacity 1s ease, transform 1s ease;
 }
 
 iframe.loaded{
 opacity:1;
-transform:translateY(0) scale(1);
 }
 
 iframe.salida{
 opacity:0;
-transform:translateY(-20px) scale(.98);
 }
 
 </style>
