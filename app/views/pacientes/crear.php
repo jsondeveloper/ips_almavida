@@ -190,12 +190,13 @@ input, select {
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Empresa</label>
-<select name="empresa_id" class="form-control">
-<option value="">-- Sin empresa --</option>
+<select name="empresa_id" class="form-control" required>
+<option value="">-- Seleccione --</option>
 <?php foreach($empresas as $emp): ?>
 <option value="<?= $emp['id'] ?>"><?= htmlspecialchars($emp['nombre']) ?></option>
 <?php endforeach; ?>
 </select>
+<div class="invalid-feedback">La Empresa es obligatoria.</div>
 </div>
 
 <div class="col-md-6 mb-3">
