@@ -134,10 +134,41 @@ background:#1E6FB8;
 color:white;
 }
 
-.fc-event,
-.fc-daygrid-event,
-.fc-timegrid-event{
+/* EVENTOS */
+
+.fc-event{
+border:none;
+font-size:12px;
+
 cursor:pointer;
+
+/* separación entre citas */
+margin-bottom:2px;
+
+
+
+/* animación suave */
+transition:all .15s ease;
+}
+
+.fc-event:hover{
+transform:scale(1.03);
+}
+
+/* arreglar altura en week y day */
+
+.fc-timegrid-event{
+min-height:55px;
+padding:4px 6px !important;
+}
+
+.fc-timegrid-event .fc-event-main{
+white-space:normal;
+line-height:1.2;
+}
+
+.fc-timegrid-event-harness{
+margin-bottom:3px;
 }
 
 </style>
@@ -152,7 +183,7 @@ cursor:pointer;
 
 <div class="modal fade" id="modalCita">
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-dialog-centered">
 
 <div class="modal-content">
 
@@ -198,9 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
 var calendarEl = document.getElementById("calendar");
 
 calendar = new FullCalendar.Calendar(calendarEl, {
-
 locale:"es",
-
+firstDay:1,
 initialView:"dayGridMonth",
 
 height:"100%",
@@ -224,14 +254,36 @@ hour12:true
 });
 
 var paciente = arg.event.extendedProps.paciente;
+var tipo = arg.event.extendedProps.tipo;
 var color = arg.event.backgroundColor;
+
+var vista = arg.view.type;
 
 var contenedor = document.createElement("div");
 
+contenedor.style.background = color;
+contenedor.style.color = "white";
+contenedor.style.padding = "4px 6px";
+contenedor.style.borderRadius = "6px";
+contenedor.style.width = "100%";
+
+if(vista === "dayGridMonth"){
+
 contenedor.innerHTML = `
-<span class="punto" style="background:${color}"></span>
 <b>${hora}</b> ${paciente}
+<br>
+<span style="font-size:11px;opacity:.9">${tipo}</span>
 `;
+
+}else{
+contenedor.style.padding = "1px";
+contenedor.innerHTML = `
+<b>${hora}</b> ${paciente}
+<br>
+<span style="font-size:11px;opacity:.9">${tipo}</span>
+`;
+
+}
 
 return { domNodes:[contenedor] };
 
