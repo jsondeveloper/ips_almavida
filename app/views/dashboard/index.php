@@ -78,39 +78,80 @@ else $pacientesEdad["50+"]++;
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 body{
-background:#f1f4f8;
+background:#F7FAFC;
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+color:#333;
 }
+
+/* CARDS INDICADORES */
 
 .card-counter{
-border-radius:15px;
-color:white;
+background:white;
+border:1px solid #E6E6E6;
+border-radius:10px;
 padding:20px;
-text-align:center;
+display:flex;
+align-items:center;
+gap:15px;
+box-shadow:0 2px 6px rgba(0,0,0,0.04);
 }
 
-.bg1{background:#4e73df;}
-.bg2{background:#1cc88a;}
-.bg3{background:#f6c23e;}
-.bg4{background:#e74a3b;}
+.icon-box{
+width:45px;
+height:45px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+font-size:22px;
+color:white;
+}
+
+.icon-pacientes{ background:#1E6FB8; }
+.icon-citas{ background:#1FA89A; }
+.icon-empresas{ background:#0F4C81; }
+.icon-hoy{ background:#2FBF71; }
+
+.counter-title{
+font-size:14px;
+color:#666;
+margin-bottom:2px;
+}
+
+.counter-number{
+font-size:22px;
+font-weight:600;
+color:#0F4C81;
+}
+
+/* GRÁFICOS */
 
 .chart-box{
 background:white;
-padding:15px;
+padding:18px;
 border-radius:10px;
+border:1px solid #E6E6E6;
+box-shadow:0 2px 6px rgba(0,0,0,0.04);
 }
 
 .chart-title{
-font-weight:bold;
+font-weight:600;
 margin-bottom:10px;
+color:#0F4C81;
+font-size:15px;
 }
-
+#chartHoras {
+    height: 160px !important;
+}
 .timeline{
-height:150px;
+height:210px;
 }
 
 </style>
@@ -122,30 +163,50 @@ height:150px;
 <div class="row g-3">
 
 <div class="col-md-3">
-<div class="card-counter bg1">
-<h4>Pacientes</h4>
-<h2><?= $totalPacientes ?></h2>
+<div class="card-counter">
+<div class="icon-box icon-pacientes">
+<i class="bi bi-person"></i>
 </div>
+<div>
+<div class="counter-title">Pacientes</div>
+<div class="counter-number"><?= $totalPacientes ?></div>
 </div>
-
-<div class="col-md-3">
-<div class="card-counter bg2">
-<h4>Citas</h4>
-<h2><?= $totalCitas ?></h2>
 </div>
 </div>
 
 <div class="col-md-3">
-<div class="card-counter bg3">
-<h4>Empresas</h4>
-<h2><?= $totalEmpresas ?></h2>
+<div class="card-counter">
+<div class="icon-box icon-citas">
+<i class="bi bi-clock-history"></i>
+</div>
+<div>
+<div class="counter-title">Citas</div>
+<div class="counter-number"><?= $totalCitas ?></div>
+</div>
 </div>
 </div>
 
 <div class="col-md-3">
-<div class="card-counter bg4">
-<h4>Citas Hoy</h4>
-<h2><?= $citasHoy ?></h2>
+<div class="card-counter">
+<div class="icon-box icon-empresas">
+<i class="bi bi-building"></i>
+</div>
+<div>
+<div class="counter-title">Empresas</div>
+<div class="counter-number"><?= $totalEmpresas ?></div>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card-counter">
+<div class="icon-box icon-hoy">
+<i class="bi bi-calendar-check"></i>
+</div>
+<div>
+<div class="counter-title">Citas Hoy</div>
+<div class="counter-number"><?= $citasHoy ?></div>
+</div>
 </div>
 </div>
 
@@ -200,10 +261,19 @@ height:150px;
 
 <script>
 
-const ctxExamen = document.getElementById("chartExamen").getContext("2d");
-const ctxEPS = document.getElementById("chartEPS").getContext("2d");
-const ctxEdad = document.getElementById("chartEdad").getContext("2d");
-const ctxHoras = document.getElementById("chartHoras").getContext("2d");
+const coloresMarca=[
+"#1E6FB8",
+"#2FBF71",
+"#1FA89A",
+"#0F4C81",
+"#7ED957"
+];
+
+const ctxExamen=document.getElementById("chartExamen").getContext("2d");
+const ctxEPS=document.getElementById("chartEPS").getContext("2d");
+const ctxEdad=document.getElementById("chartEdad").getContext("2d");
+const ctxHoras=document.getElementById("chartHoras").getContext("2d");
+
 
 new Chart(ctxExamen,{
 type:"pie",
@@ -211,7 +281,7 @@ data:{
 labels:<?=json_encode(array_keys($tiposExamen))?>,
 datasets:[{
 data:<?=json_encode(array_values($tiposExamen))?>,
-backgroundColor:["#ff6384","#36a2eb","#ffce56","#4bc0c0","#9966ff"]
+backgroundColor:coloresMarca
 }]
 }
 });
@@ -223,7 +293,7 @@ data:{
 labels:<?=json_encode(array_keys($pacientesEPS))?>,
 datasets:[{
 data:<?=json_encode(array_values($pacientesEPS))?>,
-backgroundColor:["#36a2eb","#ff6384","#4bc0c0","#ffce56","#9966ff"]
+backgroundColor:coloresMarca
 }]
 }
 });
@@ -235,7 +305,7 @@ data:{
 labels:<?=json_encode(array_keys($pacientesEdad))?>,
 datasets:[{
 data:<?=json_encode(array_values($pacientesEdad))?>,
-backgroundColor:["#ff6384","#36a2eb","#ffce56","#4bc0c0","#9966ff"]
+backgroundColor:coloresMarca
 }]
 }
 });
@@ -248,22 +318,16 @@ labels:<?=json_encode(array_keys($horasCitas))?>,
 datasets:[{
 label:"Cantidad de Citas",
 data:<?=json_encode(array_values($horasCitas))?>,
-borderColor:"#4e73df",
-backgroundColor:"rgba(78,115,223,0.2)",
+borderColor:"#1E6FB8",
+backgroundColor:"rgba(30,111,184,0.15)",
 fill:true,
 tension:0.4
 }]
 },
 options:{
 maintainAspectRatio:false,
-plugins:{
-legend:{display:false}
-},
-scales:{
-y:{
-beginAtZero:true
-}
-}
+plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true}}
 }
 });
 

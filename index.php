@@ -4,131 +4,390 @@ require_once "app/middleware/auth.php";
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Sistema IPS Alma Vida</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <style>
-html,body{ height:100%; margin:0; }
-.sidebar{ height:calc(100vh - 50px); background:#0d6efd; color:white; display:flex; flex-direction:column; }
-.sidebar a{ color:white; text-decoration:none; display:block; padding:14px 18px; font-size:17px; transition:0.2s; }
-.sidebar a:hover{ background:#084298; }
-.menu-links{ flex:1; }
-.menu-links a.active{ background:#084298; font-weight:bold; }
-.usuario-box{ border-top:2px solid rgba(255,255,255,0.25); padding:15px 0 15px 0; }
-.usuario-box .mb-2{ color:white; text-decoration:none; display:block; padding:0 18px; font-size:17px; transition:0.2s; }
-.usuario-box b{ font-size:15px; }
-iframe{ width:100%; height:calc(100vh - 56px); border:none; }
-.logout-link{ display:block; color:white; text-decoration:none; font-size:15px; padding:8px 12px; transition:0.2s; }
-.logout-link:hover{ background:#084298; color:white; }
-#fecha{ font-size:14px; opacity:0.9; }
-#hora{ font-size:16px; letter-spacing:1px; }
-.reloj-icono{ display:inline-block; animation:rotarReloj 2s linear infinite; }
-@keyframes rotarReloj{ 0%{ transform:rotate(0deg); } 100%{ transform:rotate(360deg); } }
+
+html,body{
+height:100%;
+margin:0;
+background:#F7FAFC;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+}
+footer{
+       background: #7ED957;
+background: linear-gradient(90deg, rgba(126, 217, 87, 1) 0%, rgba(47, 191, 113, 1) 25%, rgba(31, 168, 154, 1) 50%, rgba(30, 111, 184, 1) 75%, rgba(15, 76, 129, 1) 100%);
+    height: 5px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+/* NAVBAR */
+
+.navbar1{
+background: #1E6FB8;
+height: 5px !important;
+background: linear-gradient(90deg, rgba(30, 111, 184, 1) 0%, rgba(15, 76, 129, 1) 25%, rgba(31, 168, 154, 1) 50%, rgba(47, 191, 113, 1) 75%, rgba(126, 217, 87, 1) 100%);
+}
+
+.navbar-brand{
+font-weight:600;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+height:calc(100vh - 16px);
+background:#FFFFFF;
+border-right:1px solid #E6E6E6;
+display:flex;
+flex-direction:column;
+}
+
+.sidebar a{
+color:#333;
+text-decoration:none;
+display:block;
+padding:14px 18px;
+font-size:15px;
+transition:0.2s;
+border-left:3px solid transparent;
+}
+
+.sidebar a i{
+color:#1E6FB8;
+margin-right:8px;
+}
+
+.sidebar a:hover{
+background:#F4F8FB;
+}
+
+.menu-links{
+flex:1;
+}
+
+.menu-links a.active{
+background:#F0F6FC;
+border-left:3px solid #1E6FB8;
+font-weight:600;
+}
+
+/* USUARIO */
+
+.usuario-box{
+border-top:1px solid #E6E6E6;
+padding:15px 0;
+}
+
+.usuario-box .mb-2{
+color:#333;
+padding:0 18px;
+font-size:14px;
+}
+
+.usuario-box b{
+font-weight:600;
+}
+
+.logout-link{
+display:block;
+color:#555;
+text-decoration:none;
+font-size:14px;
+padding:8px 18px;
+transition:0.2s;
+}
+
+.logout-link:hover{
+background:#F4F8FB;
+color:#0F4C81;
+}
+
+/* CONTENIDO */
+
+iframe{
+width:100%;
+height:calc(100vh - 22px);
+border:none;
+background:white;
+}
+
+
+
+/* OFFCANVAS */
+
+.offcanvas.sidebar{
+background:#FFFFFF;
+}
+
+.offcanvas a{
+color:#333;
+}
+
+.offcanvas a i{
+color:#1E6FB8;
+margin-right:8px;
+}
+
+.logo{
+    margin-bottom:1rem;
+}
+
 </style>
 </head>
 
-<script>
-// Reloj
-function actualizarReloj(){
-    const ahora = new Date();
-    const opcionesFecha = { weekday:'short', year:'numeric', month:'short', day:'numeric' };
-    let fecha = ahora.toLocaleDateString('es-ES',opcionesFecha);
-    let hora = ahora.toLocaleTimeString('es-ES',{hour:'2-digit', minute:'2-digit', second:'2-digit'});
-    document.getElementById("fecha").innerHTML = "📅 " + fecha;
-    document.getElementById("hora").innerHTML = hora;
-}
-setInterval(actualizarReloj,1000);
-actualizarReloj();
-</script>
+
 
 <body>
+
 <!-- NAVBAR -->
-<nav class="navbar navbar-dark bg-primary">
-<div class="container-fluid">
-    <div class="d-flex align-items-center">
-        <button class="btn btn-light d-md-none me-3" data-bs-toggle="offcanvas" data-bs-target="#menu">☰</button>
-        <span class="navbar-brand mb-0 h1">IPS Alma Vida</span>
-    </div>
-    <div class="d-flex align-items-center text-white gap-3">
-        <div id="fecha" class="fw-semibold"></div>
-        <div class="d-flex align-items-center gap-2">
-            <span class="reloj-icono">🕒</span>
-            <div id="hora" class="fw-bold"></div>
-        </div>
-    </div>
+
+<nav class="navbar1">
+
+
+<button class="btn btn-light d-md-none me-3"
+data-bs-toggle="offcanvas"
+data-bs-target="#menu">
+
+<i class="bi bi-list"></i>
+
+</button>
+
+
+
 </div>
+
+
+
+</div>
+
 </nav>
 
-<!-- LAYOUT PRINCIPAL -->
+<!-- LAYOUT -->
+
 <div class="container-fluid">
+
 <div class="row">
 
 <!-- SIDEBAR PC -->
+
 <div class="col-md-2 sidebar d-none d-md-flex">
-    <div class="menu-links">
-        <a href="app/views/dashboard/index.php" target="contenido">📊 Dashboard</a>
-        <a href="app/views/empresas/listar.php" target="contenido">🏢 Empresas</a>
-        <a href="app/views/pacientes/listar.php" target="contenido">👤 Pacientes</a>
-        <a href="app/views/citas/listar.php" target="contenido">📅 Citas</a>
-        <a href="app/views/dashboard/calendario.php" target="contenido">🗓 Calendario</a>
-        
-    </div>
-    <div class="usuario-box">
-        <div class="mb-2">👤 <b><?= htmlspecialchars($_SESSION['usuario']) ?></b></div>
-        <a href="app/auth/logout.php" class="logout-link">🔓 Cerrar sesión</a>
-    </div>
+    <img class="logo" src="img/logo1.png">
+
+<div class="menu-links">
+
+<a href="app/views/dashboard/index.php" target="contenido">
+
+<i class="bi bi-speedometer2"></i>
+Dashboard
+
+</a>
+
+<a href="app/views/empresas/listar.php" target="contenido">
+
+<i class="bi bi-building"></i>
+Empresas
+
+</a>
+
+<a href="app/views/pacientes/listar.php" target="contenido">
+
+<i class="bi bi-person"></i>
+Pacientes
+
+</a>
+
+<a href="app/views/citas/listar.php" target="contenido">
+
+<i class="bi bi-clock-history"></i>
+Citas
+
+</a>
+
+<a href="app/views/dashboard/calendario.php" target="contenido">
+
+<i class="bi bi-calendar3"></i>
+Calendario
+
+</a>
+
+</div>
+
+
+<div class="usuario-box">
+<div class="mb-2">
+
+<i class="bi bi-person-circle"></i>
+<b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
+
+</div>
+
+<a href="app/auth/logout.php" class="logout-link">
+
+<i class="bi bi-box-arrow-right"></i>
+Cerrar sesión
+
+</a>
+
+</div>
+
 </div>
 
 <!-- CONTENIDO -->
+
 <div class="col-md-10 p-0">
-    <iframe name="contenido" src="app/views/dashboard/index.php"></iframe>
+
+<iframe
+name="contenido"
+src="app/views/dashboard/index.php">
+
+</iframe>
+
 </div>
 
 </div>
+
 </div>
 
 <!-- MENU MOVIL -->
+
 <div class="offcanvas offcanvas-start sidebar" tabindex="-1" id="menu">
-    <div class="offcanvas-header">
-        <h5>Menú</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <a class="d-block p-3 text-white" href="app/views/dashboard/index.php" target="contenido" onclick="cerrarMenu()">📊 Dashboard</a>
-        <a class="d-block p-3 text-white" href="app/views/empresas/listar.php" target="contenido" onclick="cerrarMenu()">🏢 Empresas</a>
-        <a class="d-block p-3 text-white" href="app/views/pacientes/listar.php" target="contenido" onclick="cerrarMenu()">👤 Pacientes</a>
-        <a class="d-block p-3 text-white" href="app/views/citas/listar.php" target="contenido" onclick="cerrarMenu()">📅 Citas</a>        
-        <a class="d-block p-3 text-white" href="app/views/dashboard/calendario.php" target="contenido" onclick="cerrarMenu()">🗓 Calendario</a>
-        <hr>
-        <div class="text-center">
-            <div class="mb-2">👤 <b><?= htmlspecialchars($_SESSION['usuario']) ?></b></div>
-            <a class="logout-link" href="app/auth/logout.php" onclick="cerrarMenu()">🔓 Cerrar sesión</a>
-        </div>
-    </div>
+
+<div class="offcanvas-header">
+
+<h5 class="fw-semibold">Menú</h5>
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="offcanvas">
+
+</button>
+
+</div>
+
+<div class="offcanvas-body">
+
+<a class="d-block p-3"
+href="app/views/dashboard/index.php"
+target="contenido"
+onclick="cerrarMenu()">
+
+<i class="bi bi-speedometer2"></i>
+Dashboard
+
+</a>
+
+<a class="d-block p-3"
+href="app/views/empresas/listar.php"
+target="contenido"
+onclick="cerrarMenu()">
+
+<i class="bi bi-building"></i>
+Empresas
+
+</a>
+
+<a class="d-block p-3"
+href="app/views/pacientes/listar.php"
+target="contenido"
+onclick="cerrarMenu()">
+
+<i class="bi bi-person"></i>
+Pacientes
+
+</a>
+
+<a class="d-block p-3"
+href="app/views/citas/listar.php"
+target="contenido"
+onclick="cerrarMenu()">
+
+<i class="bi bi-clock-history"></i>
+Citas
+
+</a>
+
+<a class="d-block p-3"
+href="app/views/dashboard/calendario.php"
+target="contenido"
+onclick="cerrarMenu()">
+
+<i class="bi bi-calendar3"></i>
+Calendario
+
+</a>
+
+<hr>
+
+<div class="text-center">
+
+<div class="mb-2">
+
+<i class="bi bi-person-circle"></i>
+<b><?= htmlspecialchars($_SESSION['usuario']) ?></b>
+
+</div>
+
+<a class="logout-link"
+href="app/auth/logout.php"
+onclick="cerrarMenu()">
+
+<i class="bi bi-box-arrow-right"></i>
+Cerrar sesión
+
+</a>
+
+</div>
+
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+
 function cerrarMenu(){
-    var menu = document.getElementById('menu');
-    var offcanvas = bootstrap.Offcanvas.getInstance(menu);
-    if(offcanvas) offcanvas.hide();
+
+var menu = document.getElementById('menu');
+
+var offcanvas = bootstrap.Offcanvas.getInstance(menu);
+
+if(offcanvas) offcanvas.hide();
+
 }
 
-// Resaltar menú activo según iframe
 const links = document.querySelectorAll('.menu-links a');
+
 const iframe = document.querySelector('iframe[name="contenido"]');
 
-iframe.addEventListener('load', () => {
-    const src = iframe.contentWindow.location.pathname;
-    links.forEach(link => link.classList.remove('active'));
-    links.forEach(link => {
-        if(src.endsWith(link.getAttribute('href').replace(/^.*\/app\//,''))){
-            link.classList.add('active');
-        }
-    });
+iframe.addEventListener('load',()=>{
+
+const src = iframe.contentWindow.location.pathname;
+
+links.forEach(link=>link.classList.remove('active'));
+
+links.forEach(link=>{
+
+if(src.endsWith(link.getAttribute('href').replace(/^.*\/app\//,''))){
+link.classList.add('active');
+}
+
 });
+
+});
+
 </script>
+<footer></footer>
 </body>
 </html>
