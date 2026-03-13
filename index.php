@@ -45,7 +45,7 @@ font-weight:600;
 /* SIDEBAR */
 
 .sidebar{
-height:calc(100vh - 16px);
+height:calc(100vh - 10px);
 background:#FFFFFF;
 border-right:1px solid #E6E6E6;
 display:flex;
@@ -116,7 +116,7 @@ color:#0F4C81;
 
 iframe{
 width:100%;
-height:calc(100vh - 22px);
+height:calc(100vh - 14px);
 border:none;
 background:white;
 }

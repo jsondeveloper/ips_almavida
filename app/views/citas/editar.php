@@ -166,9 +166,10 @@ input, select {
 <!-- HORA -->
 <div class="col-md-6">
     <label class="form-label">Hora</label>
-    <select name="fecha" id="hora" class="form-control" required>
-        <option value="">-- Seleccione una hora --</option>
-    </select>
+    <select name="fecha" id="hora" class="form-control" required
+        data-hora-actual="<?= date('H:i', strtotime($cita['fecha_cita'])) ?>">
+    <option value="">-- Seleccione una hora --</option>
+</select>
     <div class="invalid-feedback">Debe seleccionar una hora disponible.</div>
 </div>
 
