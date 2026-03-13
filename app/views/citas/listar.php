@@ -17,15 +17,22 @@ $citas = $c->listar();
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-body { background:#F7FAFC; font-family: system-ui,-apple-system,Segoe UI,Roboto; }
-.card { border:none; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+body { background:#f5f7fa; font-family:'Segoe UI', sans-serif; }
+.card { border:none; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.toolbar { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; align-items:center; }
+.toolbar h3 { flex:1; margin:0; color:#0F4C81; font-weight:600; }
+.toolbar input { flex:2; min-width:150px; border-radius:6px; border:1px solid #E6E6E6; padding:6px 10px; }
+.table th, .table td{ font-size:0.875rem; vertical-align:middle; }
+.table tbody tr td{ padding:0.35rem 0.5rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.btn-editar { background:#1E6FB8; border-color:#1E6FB8; color:white; }
+.btn-editar:hover { background:#0F4C81; border-color:#0F4C81; }
+.btn-eliminar { background:#2FBF71; border-color:#2FBF71; color:white; }
+.btn-eliminar:hover { background:#1FA89A; border-color:#1FA89A; }
 
-.toolbar { display:flex; align-items:center; gap:0.5rem; flex-wrap:nowrap; margin-bottom:1rem; }
-.toolbar h3 { flex:0 0 auto; margin-bottom:0; font-size:1.25rem; color:#0F4C81; }
-.toolbar input { flex:2 1 auto; min-width:180px; border-radius:6px; border:1px solid #E6E6E6; }
-.toolbar button, .toolbar a { flex:0 0 auto; white-space:nowrap; border-radius:6px; }
-
-.table th, .table td { font-size:0.875rem; vertical-align:middle; }
+input, select { border-radius:8px; border:1px solid #E6E6E6; padding:6px 10px; }
+.is-invalid { border-color:#dc3545 !important; }
+.is-valid { border-color:#2FBF71 !important; }
+.invalid-feedback { display:none; color:#dc3545; font-size:0.85rem; }
 
 .badge-examen { font-size:0.75rem; padding:0.35em 0.5em; border-radius:6px; color:white; }
 .badge-Sangre{ background:#1E6FB8; }
@@ -34,12 +41,7 @@ body { background:#F7FAFC; font-family: system-ui,-apple-system,Segoe UI,Roboto;
 .badge-Ultrasonido{ background:#2FBF71; }
 .badge-Electrocardiograma{ background:#7ED957; }
 
-.btn-sm i { vertical-align:middle; }
 
-.btn-editar{ background:#1E6FB8; border-color:#1E6FB8; color:white; }
-.btn-editar:hover{ background:#0F4C81; border-color:#0F4C81; }
-.btn-eliminar{ background:#2FBF71; border-color:#2FBF71; color:white; }
-.btn-eliminar:hover{ background:#1FA89A; border-color:#1FA89A; }
 /* Botones dentro del modal */
 .modal-content .btn-guardar {
     background:#2FBF71 !important;
@@ -84,6 +86,7 @@ body { background:#F7FAFC; font-family: system-ui,-apple-system,Segoe UI,Roboto;
     <button id="limpiarFiltros" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-circle"></i> Limpiar</button>
     <button id="btnCrear" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Nueva Cita</button>
 </div>
+
 
 <div class="table-responsive">
 <table class="table table-hover align-middle" id="tablaCitas">
