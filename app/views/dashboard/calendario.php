@@ -27,7 +27,7 @@ case "Electrocardiograma": $color="#7ED957"; break;
 }
 
 $eventos[] = [
-"title"=>$tipo." - ".$cita['nombre_completo'],
+"title"=>$cita['nombre_completo'],
 "start"=>str_replace(" ","T",$cita['fecha_cita']),
 "color"=>$color,
 "tipo"=>$tipo,
@@ -62,8 +62,6 @@ background:#F7FAFC;
 font-family:system-ui,-apple-system,Segoe UI,Roboto;
 }
 
-/* CONTENEDOR CALENDARIO */
-
 #calendar{
 height:100%;
 background:white;
@@ -73,14 +71,10 @@ border:1px solid #E6E6E6;
 box-shadow:0 2px 6px rgba(0,0,0,0.04);
 }
 
-/* HEADER */
-
 .fc-toolbar-title{
 color:#0F4C81;
 font-weight:600;
 }
-
-/* BOTONES */
 
 .fc-button{
 background:#1E6FB8 !important;
@@ -95,8 +89,6 @@ background:#0F4C81 !important;
 background:#0F4C81 !important;
 }
 
-/* FILTROS */
-
 .fc-toolbar-chunk select{
 margin-left:8px;
 padding:5px 8px;
@@ -110,8 +102,6 @@ background:white;
 .fc-filtroEmpresa-button{
 display:none !important;
 }
-
-/* EVENTOS */
 
 .fc-event{
 border:none;
@@ -129,15 +119,25 @@ color:#333 !important;
 text-decoration:none;
 }
 
-/* MODAL */
+/* punto de color */
+
+.punto{
+width:8px;
+height:8px;
+border-radius:50%;
+display:inline-block;
+margin-right:5px;
+}
 
 .modal-header{
 background:#1E6FB8;
 color:white;
 }
 
-.modal-title{
-font-weight:600;
+.fc-event,
+.fc-daygrid-event,
+.fc-timegrid-event{
+cursor:pointer;
 }
 
 </style>
@@ -148,8 +148,7 @@ font-weight:600;
 
 <div id="calendar"></div>
 
-
-<!-- MODAL DETALLE CITA -->
+<!-- MODAL -->
 
 <div class="modal fade" id="modalCita">
 
@@ -214,6 +213,30 @@ right:"filtroTipo filtroEmpresa dayGridMonth,timeGridWeek,timeGridDay"
 
 events:eventos,
 
+eventContent:function(arg){
+
+var fecha = arg.event.start;
+
+var hora = fecha.toLocaleTimeString('es-CO',{
+hour:'numeric',
+minute:'2-digit',
+hour12:true
+});
+
+var paciente = arg.event.extendedProps.paciente;
+var color = arg.event.backgroundColor;
+
+var contenedor = document.createElement("div");
+
+contenedor.innerHTML = `
+<span class="punto" style="background:${color}"></span>
+<b>${hora}</b> ${paciente}
+`;
+
+return { domNodes:[contenedor] };
+
+},
+
 eventClick:function(info){
 
 document.getElementById("mPaciente").innerText = info.event.extendedProps.paciente;
@@ -226,9 +249,7 @@ new bootstrap.Modal(document.getElementById("modalCita")).show();
 },
 
 datesSet:function(){
-
 setTimeout(insertarFiltros,50);
-
 }
 
 });
