@@ -96,7 +96,7 @@ h3 { color:#0F4C81; font-weight:600; margin-bottom:20px; }
 <!-- Empresa -->
 <div class="col-md-6 mb-3">
 <label class="form-label">Empresa</label>
-<select name="empresa_id" class="form-control">
+<select name="empresa_id" class="form-control" required>
 <option value="">-- Sin empresa --</option>
 <?php foreach($empresas as $emp): ?>
 <option value="<?= $emp['id'] ?>" <?= $paciente['empresa_id']==$emp['id']?'selected':'' ?>>
@@ -104,6 +104,7 @@ h3 { color:#0F4C81; font-weight:600; margin-bottom:20px; }
 </option>
 <?php endforeach; ?>
 </select>
+<div class="invalid-feedback">La Empresa es obligatoria.</div>
 </div>
 
 <!-- Dirección -->

@@ -94,7 +94,7 @@ input, select { border-radius:8px; border:1px solid #E6E6E6; padding:6px 10px; }
 <th>NIT</th>
 <th>Dirección</th>
 <th>Teléfono</th>
-<th class="text-center">Pacientes</th> <!-- NUEVA COLUMNA -->
+<th class="text-center">Pacientes</th> 
 <th class="text-center">Acciones</th>
 </tr>
 </thead>
@@ -105,7 +105,7 @@ input, select { border-radius:8px; border:1px solid #E6E6E6; padding:6px 10px; }
 <td><?= htmlspecialchars($empresa['nit']) ?></td>
 <td><?= htmlspecialchars($empresa['direccion']) ?></td>
 <td><?= htmlspecialchars($empresa['telefono']) ?></td>
-<td class="text-center"><?= $empresa['cantidad_empleados'] ?></td> <!-- NUEVA COLUMNA -->
+<td class="text-center"><?= $empresa['cantidad_empleados'] ?></td> 
 <td class="text-center">
     <div class="d-flex justify-content-center flex-wrap gap-1">
         <button class="btn btn-guardar btn-sm btn-editar btn-lightbox" data-id="<?= $empresa['id'] ?>"><i class="bi bi-pencil-square"></i></button>
